@@ -4,7 +4,9 @@
  * This is a simple program to demonstrate how to use NoobSDL.h
  * 
  * Will write random noise to the screen.
- * 
+ *
+ * Compiled on linux with 'gcc -ggdb3 -Wall -O3 -o main main.c `sdl2-config --cflags --libs`'
+ *
  */
 
 
