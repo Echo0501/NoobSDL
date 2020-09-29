@@ -33,7 +33,7 @@ int init_NoobSDL() {
 	
 	
 	// Create main_window
-	MAIN_WINDOW = SDL_CreateWindow("Lich",
+	MAIN_WINDOW = SDL_CreateWindow("NoobSDL",
 					SDL_WINDOWPOS_CENTERED,
 					SDL_WINDOWPOS_CENTERED,
 					WINDOW_WIDTH,
