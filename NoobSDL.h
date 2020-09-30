@@ -8,18 +8,16 @@ static int HORIZONTAL_RESOLUTION;
 static int VERTICAL_RESOLUTION;
 
 
-#define DELTA_X (WINDOW_WIDTH / HORIZONTAL_RESOLUTION)
-#define DELTA_Y (WINDOW_HEIGHT / VERTICAL_RESOLUTION)
 
-/* This is a pointer to be used to write pixel data */
-static unsigned char * PIX_BUF;
 
-static int PIX_SIZE;
-static int PITCH;
 
 SDL_Window * MAIN_WINDOW;
 SDL_Renderer * MAIN_RENDERER;
 
+static SDL_Texture * TEXTURE_BUFFER;
+
+static unsigned char * PIX_BUF;
+static int PITCH;
 
 int init_NoobSDL() {
 	
@@ -63,52 +61,46 @@ int init_NoobSDL() {
 		return 1;
 	}
 	
-	// Allocate buffer for program to write pixel data to
-	PIX_SIZE = VERTICAL_RESOLUTION * HORIZONTAL_RESOLUTION * 4;
-	PIX_BUF = (unsigned char *) malloc(PIX_SIZE);
 	
-	return 0;
-}
-
-void render_NoobSDL() {
-	
-	// pointer to SDL texture pixel data
-	unsigned char * pix;
 	
 	// create SDL texture
-	SDL_Texture * BUFFER = SDL_CreateTexture(MAIN_RENDERER, 
+	TEXTURE_BUFFER = SDL_CreateTexture(MAIN_RENDERER, 
 								SDL_PIXELFORMAT_BGRA8888,
 								SDL_TEXTUREACCESS_STREAMING,
 								HORIZONTAL_RESOLUTION,
 							  	VERTICAL_RESOLUTION);
 	
 	// Get pixel data, and prepare to write to texture
-	SDL_LockTexture(BUFFER, NULL, (void**)&pix, &PITCH);
+	SDL_LockTexture(TEXTURE_BUFFER, NULL, (void**)&PIX_BUF, &PITCH);
 	
-	// Write data from PIX_BUF to T\texture
-	memcpy(pix,PIX_BUF,PIX_SIZE);
+	
+	
+	return 0;
+}
+
+void render_NoobSDL() {
 	
 	// stop writing to texture
-	SDL_UnlockTexture(BUFFER);
+	SDL_UnlockTexture(TEXTURE_BUFFER);
 	
 	// write texture to the screen
-	SDL_RenderCopy(MAIN_RENDERER, BUFFER, NULL, NULL);
-	
-	// cleanup
-	SDL_DestroyTexture(BUFFER);
+	SDL_RenderCopy(MAIN_RENDERER, TEXTURE_BUFFER, NULL, NULL);
 	
 	// update screen
 	SDL_RenderPresent(MAIN_RENDERER);
+	
+	// Get pixel data, and prepare to write to texture
+	SDL_LockTexture(TEXTURE_BUFFER, NULL, (void**)&PIX_BUF, &PITCH);
+	
 }
 
 
 int exit_NoobSDL() {
 	// Cleanup and Exit
+	SDL_DestroyTexture(TEXTURE_BUFFER);
 	SDL_DestroyRenderer(MAIN_RENDERER);
 	SDL_DestroyWindow(MAIN_WINDOW);
 	SDL_Quit();
-	
-	free(PIX_BUF);
 	
 	return 0;
 }

@@ -70,19 +70,11 @@ int main (void) {
 				PIX_BUF[z++] = rtn.g;
 				PIX_BUF[z++] = rtn.b;
 				
-				/* 
-				 * Pitch is the the Horizontal resolution * number of bytes per pixel (in this case, 4)
-				 * The pixel data is one after the other, so z is set to the first position, then incremented along
-				 * The pixel data is ordered Alpha, Red, Green, Blue
-				 */
-				
 			}
 		}
 		
-		
 		// Draw PIX_BUF to screen
 		render_NoobSDL();
-		
 	}
 	
 	
