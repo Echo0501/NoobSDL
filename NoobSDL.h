@@ -9,8 +9,6 @@ static int VERTICAL_RESOLUTION;
 
 
 
-
-
 SDL_Window * MAIN_WINDOW;
 SDL_Renderer * MAIN_RENDERER;
 
@@ -18,6 +16,8 @@ static SDL_Texture * TEXTURE_BUFFER;
 
 static unsigned char * PIX_BUF;
 static int PITCH;
+
+
 
 int init_NoobSDL() {
 	
@@ -78,7 +78,7 @@ int init_NoobSDL() {
 	return 0;
 }
 
-void render_NoobSDL() {
+int render_NoobSDL() {
 	
 	// stop writing to texture
 	SDL_UnlockTexture(TEXTURE_BUFFER);
@@ -92,6 +92,7 @@ void render_NoobSDL() {
 	// Get pixel data, and prepare to write to texture
 	SDL_LockTexture(TEXTURE_BUFFER, NULL, (void**)&PIX_BUF, &PITCH);
 	
+	return 0;
 }
 
 
