@@ -40,7 +40,6 @@ int main (void) {
 	
 	unsigned short int loop = 1;
 	
-	
 	// Main loop
 	while(loop) {
 		
@@ -57,28 +56,29 @@ int main (void) {
 		}
 		
 		
+		
+		int z = 0;
 		// Drawing to PIX_BUF
 		for (int y = 0; y < VERTICAL_RESOLUTION; y++) {
 			for (int x = 0; x < HORIZONTAL_RESOLUTION; x++) {
 				
-				SDL_Color rtn;
-				
-				// Get a random color, this can be replaced with a function to return a color based on a x and y value, or other
-				rtn = (SDL_Color){rand()%255,rand()%255,rand()%255,255};
+				int l = rand()%255;
 				
 				// These statements write the RGBA values to the PIX_BUF array, which is written to the screen later
-				int z = (y * PITCH + x * 4);
-				PIX_BUF[z++] = rtn.a;
-				PIX_BUF[z++] = rtn.r;
-				PIX_BUF[z++] = rtn.g;
-				PIX_BUF[z++] = rtn.b;
+				PIX_BUF[z++] = 0; // ALPHA
+				PIX_BUF[z++] = l; // RED
+				PIX_BUF[z++] = l; // GREEN
+				PIX_BUF[z++] = l; // BLUE
 				
 			}
 		}
 		
+		
+		
 		// Draw PIX_BUF to screen
 		render_NoobSDL();
 	}
+	
 	
 	
 	// Exit function, cleans up SDL data, and pointers made with NoobSDL

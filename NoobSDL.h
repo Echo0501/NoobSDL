@@ -1,5 +1,3 @@
-
-
 /* Static Variables to be set in main program */
 static int WINDOW_WIDTH;
 static int WINDOW_HEIGHT;
@@ -7,16 +5,13 @@ static int WINDOW_HEIGHT;
 static int HORIZONTAL_RESOLUTION;
 static int VERTICAL_RESOLUTION;
 
-
-
 SDL_Window * MAIN_WINDOW;
 SDL_Renderer * MAIN_RENDERER;
 
-static SDL_Texture * TEXTURE_BUFFER;
+SDL_Texture * TEXTURE_BUFFER;
 
-static unsigned char * PIX_BUF;
-static int PITCH;
-
+unsigned char * PIX_BUF;
+int PITCH;
 
 
 int init_NoobSDL() {
@@ -70,18 +65,18 @@ int init_NoobSDL() {
 								HORIZONTAL_RESOLUTION,
 							  	VERTICAL_RESOLUTION);
 	
-	// Get pixel data, and prepare to write to texture
-	SDL_LockTexture(TEXTURE_BUFFER, NULL, (void**)&PIX_BUF, &PITCH);
 	
-	
+	// create buffer to hold pixel data.
+	PITCH = HORIZONTAL_RESOLUTION * 4;
+	PIX_BUF = (unsigned char *) malloc(VERTICAL_RESOLUTION * PITCH);
 	
 	return 0;
 }
 
-int render_NoobSDL() {
+void render_NoobSDL() {
 	
-	// stop writing to texture
-	SDL_UnlockTexture(TEXTURE_BUFFER);
+	// Write Data to Texture
+	SDL_UpdateTexture(TEXTURE_BUFFER, NULL, PIX_BUF, PITCH);
 	
 	// write texture to the screen
 	SDL_RenderCopy(MAIN_RENDERER, TEXTURE_BUFFER, NULL, NULL);
@@ -89,19 +84,14 @@ int render_NoobSDL() {
 	// update screen
 	SDL_RenderPresent(MAIN_RENDERER);
 	
-	// Get pixel data, and prepare to write to texture
-	SDL_LockTexture(TEXTURE_BUFFER, NULL, (void**)&PIX_BUF, &PITCH);
-	
-	return 0;
 }
 
 
-int exit_NoobSDL() {
+void exit_NoobSDL() {
 	// Cleanup and Exit
+	free(PIX_BUF);
 	SDL_DestroyTexture(TEXTURE_BUFFER);
 	SDL_DestroyRenderer(MAIN_RENDERER);
 	SDL_DestroyWindow(MAIN_WINDOW);
 	SDL_Quit();
-	
-	return 0;
 }
