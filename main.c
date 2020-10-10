@@ -7,7 +7,6 @@
 
 
 #include <stdlib.h>
-#include <time.h>
 #include <SDL2/SDL.h>
 
 #include "NoobSDL.h"
@@ -15,11 +14,6 @@
 
 
 int main (void) {
-	
-	// This is to make random a bit more random.
-	srand((unsigned)time(NULL));
-	
-	
 	
 	// This function initilizes SDL, and the window
 	if (init_NoobSDL(512, 512, 128, 128)) {

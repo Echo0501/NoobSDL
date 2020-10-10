@@ -1,7 +1,9 @@
 /**
+ * Header file for NoobSDL
  * 
- * 
- * 
+ * Call init with sizes.
+ * Write data to PIX_BUF, then call render_NoobSDL.
+ * Pitch is set to HORIZONTAL_RESOLUTION * (bytes per pixel)
  */
 
 
