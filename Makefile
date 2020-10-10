@@ -6,7 +6,7 @@ CC = gcc
 CFLAGS = -ggdb3 -Wall -O3
 
 # Libs
-LIBS = `sdl2-config --cflags --libs` -lm -lpthread
+LIBS = NoobSDL.c `sdl2-config --cflags --libs` -lm -lpthread
 
 # Build Target
 TARGET = main
