@@ -1,18 +1,31 @@
 
 # gcc compiler
-CC = gcc
+CC := gcc
 
 # Compile flags
-CFLAGS = -ggdb3 -Wall -O3
+CFLAGS := -ggdb3 -Wall
 
-# Libs
-LIBS = NoobSDL.c `sdl2-config --cflags --libs` -lm -lpthread
 
 # Build Target
-TARGET = main
+TARGET := main
+GRAPHC := NoobSDL
 
-$(TARGET): $(TARGET).c
-	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).c $(LIBS)
+
+# Libs
+GRAPHCLIBS := `sdl2-config --cflags --libs`
+ALLLIBS := $(GRAPHCLIBS)
+
+
+all: $(TARGET)
+
+$(TARGET): main.o $(GRAPHC).o
+	$(CC) $(CFLAGS) -o $@ $^ $(ALLLIBS)
+
+main.o: main.c $(GRAPHC).h
+	$(CC) $(CFLAGS) -c $< $(ALLLIBS)
+
+$(GRAPHC).o: $(GRAPHC).c $(GRAPHC).h
+	$(CC) $(CFLAGS) -c $< $(GRAPHCLIBS)
 
 clean:
-	$(RM) $(TARGET)
+	rm -f *.o

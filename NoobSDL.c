@@ -4,6 +4,14 @@
 #include "NoobSDL.h"
 
 
+uint8_t * PIX_BUF;
+size_t PITCH;
+
+size_t WINDOW_WIDTH;
+size_t WINDOW_HEIGHT;
+
+size_t HORIZONTAL_RESOLUTION;
+size_t VERTICAL_RESOLUTION;
 
 SDL_Window * MAIN_WINDOW;
 SDL_Renderer * MAIN_RENDERER;
@@ -12,7 +20,40 @@ SDL_Texture * TEXTURE_BUFFER;
 
 
 
-int init_NoobSDL(int window_width, int window_height, int horizontal_resolution, int vertical_resolution) {
+
+
+/** Getter Functions **/
+
+size_t get_window_width() {
+	return WINDOW_WIDTH;
+}
+
+size_t get_window_height() {
+	return WINDOW_HEIGHT;
+}
+
+size_t get_horizontal_resolution() {
+	return HORIZONTAL_RESOLUTION;
+}
+
+size_t get_vertical_resolution() {
+	return VERTICAL_RESOLUTION;
+}
+
+
+
+/** Private helpers **/
+
+
+
+
+
+
+/** Init and Quit Functions **/
+
+int init_NoobSDL(const size_t window_width, const size_t window_height, 
+				 const size_t horizontal_resolution, const size_t vertical_resolution,
+				 const char *Title) {
 	
 	WINDOW_WIDTH = window_width;
 	WINDOW_HEIGHT = window_height;
@@ -30,7 +71,7 @@ int init_NoobSDL(int window_width, int window_height, int horizontal_resolution,
 	
 	
 	// Create main_window
-	MAIN_WINDOW = SDL_CreateWindow("NoobSDL Window",
+	MAIN_WINDOW = SDL_CreateWindow(Title,
 					SDL_WINDOWPOS_CENTERED,
 					SDL_WINDOWPOS_CENTERED,
 					WINDOW_WIDTH,
@@ -69,13 +110,27 @@ int init_NoobSDL(int window_width, int window_height, int horizontal_resolution,
 	
 	
 	// create buffer to hold pixel data.
-	PITCH = HORIZONTAL_RESOLUTION * 4;
-	PIX_BUF = (unsigned char *) malloc(VERTICAL_RESOLUTION * PITCH);
+	PITCH = HORIZONTAL_RESOLUTION << 2;
+	PIX_BUF = (uint8_t *) malloc(VERTICAL_RESOLUTION * PITCH);
 	
 	return 0;
 }
 
 
+void quit_NoobSDL() {
+	// Cleanup and Exit
+	free(PIX_BUF);
+	SDL_DestroyTexture(TEXTURE_BUFFER);
+	SDL_DestroyRenderer(MAIN_RENDERER);
+	SDL_DestroyWindow(MAIN_WINDOW);
+	SDL_Quit();
+}
+
+
+
+
+
+/** Render and Draw functions **/
 
 void render_NoobSDL() {
 	
@@ -90,13 +145,23 @@ void render_NoobSDL() {
 	
 }
 
-
-
-void exit_NoobSDL() {
-	// Cleanup and Exit
-	free(PIX_BUF);
-	SDL_DestroyTexture(TEXTURE_BUFFER);
-	SDL_DestroyRenderer(MAIN_RENDERER);
-	SDL_DestroyWindow(MAIN_WINDOW);
-	SDL_Quit();
+void draw_pixel(size_t x, size_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+	size_t z = (PITCH * y) + (x << 2);
+	PIX_BUF[z++] = a; // ALPHA
+	PIX_BUF[z++] = r; // RED
+	PIX_BUF[z++] = g; // GREEN
+	PIX_BUF[z++] = b; // BLUE
+	
 }
+
+void clear_screen(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+	size_t z = 0;
+	while(z < PITCH * VERTICAL_RESOLUTION) {
+		PIX_BUF[z++] = a; // ALPHA
+		PIX_BUF[z++] = r; // RED
+		PIX_BUF[z++] = g; // GREEN
+		PIX_BUF[z++] = b; // BLUE
+	}
+}
+
+
